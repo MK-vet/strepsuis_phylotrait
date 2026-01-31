@@ -1,0 +1,130 @@
+{
+  "timestamp": "2026-01-29T07:11:54.824768",
+  "total_tests": 9,
+  "passed": 9,
+  "coverage": 100.0,
+  "results": [
+    {
+      "test": "Tree Loading",
+      "expected": ">0 terminals",
+      "actual": "91 terminals",
+      "passed": true,
+      "details": "Tree successfully loaded",
+      "category": "phylogenetic"
+    },
+    {
+      "test": "Tree Structure",
+      "expected": "Valid structure",
+      "actual": "91 tips, 81 internal",
+      "passed": true,
+      "details": "Tree topology validation",
+      "category": "phylogenetic"
+    },
+    {
+      "test": "Distance Matrix Properties",
+      "expected": "Symmetric, non-negative, zero diagonal",
+      "actual": "Sym=True, Non-neg=True, Diag0=True",
+      "passed": true,
+      "details": "Mathematical properties",
+      "category": "phylogenetic"
+    },
+    {
+      "test": "Trait Prevalence",
+      "expected": "[0%, 100%]",
+      "actual": "Range: [1.1%, 60.4%]",
+      "passed": true,
+      "details": "Prevalence range validation",
+      "category": "trait"
+    },
+    {
+      "test": "Correlation Matrix Properties",
+      "expected": "Symmetric, diagonal=1, [-1,1]",
+      "actual": "Sym=True, Diag1=True, Range=True",
+      "passed": true,
+      "details": "Mathematical properties",
+      "category": "trait"
+    },
+    {
+      "test": "Trait-Tree Matching",
+      "expected": "\u226510 common strains",
+      "actual": "91 common",
+      "passed": true,
+      "details": "Sufficient overlap for analysis",
+      "category": "phylogenetic"
+    },
+    {
+      "test": "Trait Diversity",
+      "expected": "Valid statistics",
+      "actual": "Mean richness: 2.5\u00b12.0",
+      "passed": true,
+      "details": "Gene richness per strain",
+      "category": "diversity"
+    },
+    {
+      "test": "Beta Diversity",
+      "expected": "[0, 1]",
+      "actual": "Mean Jaccard: 0.664",
+      "passed": true,
+      "details": "Between-strain diversity",
+      "category": "diversity"
+    },
+    {
+      "test": "Trait Variability",
+      "expected": "\u22651 variable trait",
+      "actual": "5/5 variable",
+      "passed": true,
+      "details": "Traits with variance > 0",
+      "category": "evolutionary"
+    }
+  ],
+  "biological_validations": [
+    {
+      "name": "Phylogenetic Tree",
+      "description": "SNP-based phylogenetic tree of S. suis strains",
+      "result": "91 terminal nodes (strains)",
+      "interpretation": "Tree represents evolutionary relationships based on core genome SNPs."
+    },
+    {
+      "name": "Phylogenetic Distances",
+      "description": "Pairwise phylogenetic distances between strains",
+      "result": "Mean distance: 0.1270",
+      "interpretation": "Larger distances indicate more divergent strains. Clustering of distances may indicate population structure."
+    },
+    {
+      "name": "AMR Gene Prevalence",
+      "description": "Prevalence of AMR genes across strains",
+      "result": "Top 3: erm(B):60%, tet(O):44%, ant(6)-Ia:30%",
+      "interpretation": "High prevalence genes may be core resistance determinants or located on successful mobile elements."
+    },
+    {
+      "name": "Gene Correlation",
+      "description": "Strongest correlation between AMR genes",
+      "result": "lnu(B) vs lsa(E): r=1.000",
+      "interpretation": "Strong positive correlation suggests co-selection or genetic linkage. Negative correlation may indicate functional redundancy."
+    },
+    {
+      "name": "Phylogenetic Signal",
+      "description": "Matching between phylogenetic tree and trait data",
+      "result": "91 strains with both tree and trait data",
+      "interpretation": "Phylogenetic signal analysis requires matching strain identifiers between tree and trait data."
+    },
+    {
+      "name": "AMR Gene Richness",
+      "description": "Number of AMR genes per strain",
+      "result": "Mean: 2.5 \u00b1 2.0, Range: 0-9",
+      "interpretation": "Higher richness indicates more extensive resistance profiles. Variation suggests diverse selection pressures."
+    },
+    {
+      "name": "Beta Diversity",
+      "description": "Average Jaccard distance between strain AMR profiles",
+      "result": "Mean Jaccard distance: 0.664",
+      "interpretation": "Higher values indicate more diverse AMR profiles. Lower values suggest homogeneous population."
+    },
+    {
+      "name": "Trait Evolution Potential",
+      "description": "Traits with sufficient variability for evolutionary analysis",
+      "result": "5 traits show variation across strains",
+      "interpretation": "Variable traits can be analyzed for phylogenetic signal and evolution rate."
+    }
+  ]
+}

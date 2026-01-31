@@ -1,0 +1,205 @@
+{
+  "timestamp": "2026-01-29T07:11:54.826663",
+  "results": [
+    {
+      "operation": "Tree Parsing",
+      "n_samples": 10,
+      "n_features": 1,
+      "time_seconds": 5.984306335449219e-05,
+      "memory_mb": null,
+      "throughput": 167103.74501992032
+    },
+    {
+      "operation": "Tree Parsing",
+      "n_samples": 50,
+      "n_features": 1,
+      "time_seconds": 0.0001404285430908203,
+      "memory_mb": null,
+      "throughput": 356052.9711375212
+    },
+    {
+      "operation": "Tree Parsing",
+      "n_samples": 100,
+      "n_features": 1,
+      "time_seconds": 0.00024318695068359375,
+      "memory_mb": null,
+      "throughput": 411206.2745098039
+    },
+    {
+      "operation": "Distance Matrix",
+      "n_samples": 10,
+      "n_features": 10,
+      "time_seconds": 0.0008246898651123047,
+      "memory_mb": null,
+      "throughput": 12125.770453888406
+    },
+    {
+      "operation": "Distance Matrix",
+      "n_samples": 30,
+      "n_features": 30,
+      "time_seconds": 0.01616692543029785,
+      "memory_mb": null,
+      "throughput": 1855.6404017165862
+    },
+    {
+      "operation": "Distance Matrix",
+      "n_samples": 50,
+      "n_features": 50,
+      "time_seconds": 0.06907153129577637,
+      "memory_mb": null,
+      "throughput": 723.8872377954278
+    },
+    {
+      "operation": "Faith's PD",
+      "n_samples": 10,
+      "n_features": 1,
+      "time_seconds": 3.886222839355469e-05,
+      "memory_mb": null,
+      "throughput": 257319.26380368098
+    },
+    {
+      "operation": "Faith's PD",
+      "n_samples": 30,
+      "n_features": 1,
+      "time_seconds": 7.843971252441406e-05,
+      "memory_mb": null,
+      "throughput": 382459.3313069909
+    },
+    {
+      "operation": "Faith's PD",
+      "n_samples": 50,
+      "n_features": 1,
+      "time_seconds": 0.0001266002655029297,
+      "memory_mb": null,
+      "throughput": 394943.879472693
+    },
+    {
+      "operation": "MPD/MNTD",
+      "n_samples": 10,
+      "n_features": 10,
+      "time_seconds": 0.0009481906890869141,
+      "memory_mb": null,
+      "throughput": 10546.401810409856
+    },
+    {
+      "operation": "MPD/MNTD",
+      "n_samples": 30,
+      "n_features": 30,
+      "time_seconds": 0.01593923568725586,
+      "memory_mb": null,
+      "throughput": 1882.1479642205402
+    },
+    {
+      "operation": "MPD/MNTD",
+      "n_samples": 50,
+      "n_features": 50,
+      "time_seconds": 0.2331070899963379,
+      "memory_mb": null,
+      "throughput": 214.49369043552258
+    },
+    {
+      "operation": "Hierarchical Clustering",
+      "n_samples": 10,
+      "n_features": 10,
+      "time_seconds": 0.0013117790222167969,
+      "memory_mb": null,
+      "throughput": 7623.235187204653
+    },
+    {
+      "operation": "Hierarchical Clustering",
+      "n_samples": 30,
+      "n_features": 30,
+      "time_seconds": 0.017214536666870117,
+      "memory_mb": null,
+      "throughput": 1742.7131836627286
+    },
+    {
+      "operation": "Hierarchical Clustering",
+      "n_samples": 50,
+      "n_features": 50,
+      "time_seconds": 0.11132025718688965,
+      "memory_mb": null,
+      "throughput": 449.154549796428
+    },
+    {
+      "operation": "Permutation Test",
+      "n_samples": 50,
+      "n_features": 100,
+      "time_seconds": 0.002025604248046875,
+      "memory_mb": null,
+      "throughput": 24683.992467043314
+    },
+    {
+      "operation": "Permutation Test",
+      "n_samples": 100,
+      "n_features": 200,
+      "time_seconds": 0.003675222396850586,
+      "memory_mb": null,
+      "throughput": 27209.23775543302
+    },
+    {
+      "operation": "Bootstrap CI",
+      "n_samples": 50,
+      "n_features": 500,
+      "time_seconds": 0.004034996032714844,
+      "memory_mb": null,
+      "throughput": 12391.585913495628
+    },
+    {
+      "operation": "Bootstrap CI",
+      "n_samples": 100,
+      "n_features": 500,
+      "time_seconds": 0.004355430603027344,
+      "memory_mb": null,
+      "throughput": 22959.842347273923
+    },
+    {
+      "operation": "Bootstrap CI",
+      "n_samples": 200,
+      "n_features": 500,
+      "time_seconds": 0.004446744918823242,
+      "memory_mb": null,
+      "throughput": 44976.71974693046
+    },
+    {
+      "operation": "Correlation Matrix",
+      "n_samples": 20,
+      "n_features": 10,
+      "time_seconds": 0.00010085105895996094,
+      "memory_mb": null,
+      "throughput": 198312.24586288416
+    },
+    {
+      "operation": "Correlation Matrix",
+      "n_samples": 50,
+      "n_features": 20,
+      "time_seconds": 6.341934204101562e-05,
+      "memory_mb": null,
+      "throughput": 788403.007518797
+    },
+    {
+      "operation": "Correlation Matrix",
+      "n_samples": 100,
+      "n_features": 30,
+      "time_seconds": 6.651878356933594e-05,
+      "memory_mb": null,
+      "throughput": 1503334.7670250896
+    },
+    {
+      "operation": "Full Pipeline",
+      "n_samples": 20,
+      "n_features": 10,
+      "time_seconds": 0.01135110855102539,
+      "memory_mb": null,
+      "throughput": 1761.9424490653223
+    },
+    {
+      "operation": "Full Pipeline",
+      "n_samples": 50,
+      "n_features": 10,
+      "time_seconds": 0.1445925235748291,
+      "memory_mb": null,
+      "throughput": 345.79934538679066
+    }
+  ]
+}

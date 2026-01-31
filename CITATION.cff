@@ -1,0 +1,58 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite it as below."
+type: software
+title: "StrepSuis-PhyloTrait: Integrated Phylogenetic and Binary Trait Analysis"
+version: 1.0.0
+date-released: 2025-01-15
+doi: "10.5281/zenodo.XXXXXXX"
+abstract: >-
+  StrepSuis-PhyloTrait is a Python package for integrated phylogenetic
+  and binary trait analysis in Streptococcus suis and other bacterial species.
+  It implements Faith's phylogenetic diversity, tree-aware clustering,
+  and binary trait association analysis.
+keywords:
+  - antimicrobial resistance
+  - bioinformatics
+  - genomics
+  - streptococcus suis
+  - phylogenetic analysis
+  - binary traits
+  - phylogenetic diversity
+license: MIT
+authors:
+  - family-names: "MK-vet"
+    affiliation: "StrepSuis Suite Development Team"
+repository-code: "https://github.com/MK-vet/strepsuis-phylotrait"
+url: "https://github.com/MK-vet/strepsuis-phylotrait"
+preferred-citation:
+  type: software
+  title: "StrepSuis-PhyloTrait: Integrated Phylogenetic and Binary Trait Analysis"
+  authors:
+    - family-names: "MK-vet"
+      affiliation: "StrepSuis Suite Development Team"
+  version: 1.0.0
+  date-released: 2025-01-15
+  repository-code: "https://github.com/MK-vet/strepsuis-phylotrait"
+references:
+  - type: article
+    title: "Conservation evaluation and phylogenetic diversity"
+    authors:
+      - family-names: "Faith"
+        given-names: "Daniel P."
+    journal: "Biological Conservation"
+    volume: 61
+    issue: 1
+    pages: "1-10"
+    year: 1992
+  - type: article
+    title: "Phylogenetic tree shapes resolve disease transmission patterns"
+    authors:
+      - family-names: "Colijn"
+        given-names: "Caroline"
+      - family-names: "Gardy"
+        given-names: "Jennifer"
+    journal: "Evolution, Medicine, and Public Health"
+    volume: 2014
+    issue: 1
+    pages: "96-108"
+    year: 2014

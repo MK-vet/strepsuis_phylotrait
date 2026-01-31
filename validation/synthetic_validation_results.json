@@ -1,0 +1,19 @@
+{
+  "generated": "2026-01-19T23:27:38.085895",
+  "n_strains": 200,
+  "n_features": {
+    "mic": 10,
+    "amr_genes": 15,
+    "virulence": 10
+  },
+  "checks": [
+    "OK Tree is valid Newick format",
+    "OK MIC row count: 200",
+    "OK AMR row count: 200",
+    "OK Virulence row count: 200",
+    "OK Cluster count: 4"
+  ],
+  "warnings": [],
+  "errors": [],
+  "validation_passed": true
+}

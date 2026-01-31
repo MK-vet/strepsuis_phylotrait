@@ -1,0 +1,316 @@
+{
+  "timestamp": "2026-01-29T07:11:54.825571",
+  "benchmarks": [
+    {
+      "name": "Jaccard Distance (n=50)",
+      "operation": "jaccard_distance",
+      "data_size": "1225 pairs",
+      "time_ms": 0.1,
+      "throughput": "11835745 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Jaccard Distance (n=100)",
+      "operation": "jaccard_distance",
+      "data_size": "4950 pairs",
+      "time_ms": 0.17,
+      "throughput": "28530262 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Jaccard Distance (n=200)",
+      "operation": "jaccard_distance",
+      "data_size": "19900 pairs",
+      "time_ms": 0.74,
+      "throughput": "27034370 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Jaccard Distance (n=500)",
+      "operation": "jaccard_distance",
+      "data_size": "124750 pairs",
+      "time_ms": 3.79,
+      "throughput": "32939903 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Hamming Distance (n=50)",
+      "operation": "hamming_distance",
+      "data_size": "1225 pairs",
+      "time_ms": 0.05,
+      "throughput": "27041945 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Hamming Distance (n=100)",
+      "operation": "hamming_distance",
+      "data_size": "4950 pairs",
+      "time_ms": 0.05,
+      "throughput": "95192329 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Hamming Distance (n=200)",
+      "operation": "hamming_distance",
+      "data_size": "19900 pairs",
+      "time_ms": 0.34,
+      "throughput": "59279119 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Hamming Distance (n=500)",
+      "operation": "hamming_distance",
+      "data_size": "124750 pairs",
+      "time_ms": 0.78,
+      "throughput": "159323123 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Hierarchical Clustering (n=50)",
+      "operation": "hierarchical_clustering",
+      "data_size": "50 samples",
+      "time_ms": 0.23,
+      "throughput": "215983 samples/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Hierarchical Clustering (n=100)",
+      "operation": "hierarchical_clustering",
+      "data_size": "100 samples",
+      "time_ms": 0.2,
+      "throughput": "508906 samples/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Hierarchical Clustering (n=200)",
+      "operation": "hierarchical_clustering",
+      "data_size": "200 samples",
+      "time_ms": 0.33,
+      "throughput": "611247 samples/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Hierarchical Clustering (n=500)",
+      "operation": "hierarchical_clustering",
+      "data_size": "500 samples",
+      "time_ms": 1.65,
+      "throughput": "302188 samples/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Correlation Matrix (f=20)",
+      "operation": "correlation_matrix",
+      "data_size": "20x20",
+      "time_ms": 0.13,
+      "throughput": "3179650 elem/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Correlation Matrix (f=50)",
+      "operation": "correlation_matrix",
+      "data_size": "50x50",
+      "time_ms": 0.29,
+      "throughput": "8704734 elem/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Correlation Matrix (f=100)",
+      "operation": "correlation_matrix",
+      "data_size": "100x100",
+      "time_ms": 1.2,
+      "throughput": "8310479 elem/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Correlation Matrix (f=200)",
+      "operation": "correlation_matrix",
+      "data_size": "200x200",
+      "time_ms": 4.29,
+      "throughput": "9332711 elem/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Richness Calculation (n=100)",
+      "operation": "richness",
+      "data_size": "100 samples",
+      "time_ms": 0.06,
+      "throughput": "1785714 samples/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Richness Calculation (n=500)",
+      "operation": "richness",
+      "data_size": "500 samples",
+      "time_ms": 0.04,
+      "throughput": "12165461 samples/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Richness Calculation (n=1000)",
+      "operation": "richness",
+      "data_size": "1000 samples",
+      "time_ms": 0.15,
+      "throughput": "6811989 samples/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Richness Calculation (n=2000)",
+      "operation": "richness",
+      "data_size": "2000 samples",
+      "time_ms": 0.05,
+      "throughput": "38167903 samples/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Beta Diversity (n=50)",
+      "operation": "beta_diversity",
+      "data_size": "1225 pairs",
+      "time_ms": 4.65,
+      "throughput": "263662 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Beta Diversity (n=100)",
+      "operation": "beta_diversity",
+      "data_size": "4950 pairs",
+      "time_ms": 18.21,
+      "throughput": "271778 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Beta Diversity (n=200)",
+      "operation": "beta_diversity",
+      "data_size": "19900 pairs",
+      "time_ms": 73.18,
+      "throughput": "271944 pairs/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Permutation Test (n=100)",
+      "operation": "permutation_test",
+      "data_size": "100 permutations",
+      "time_ms": 2.06,
+      "throughput": "48428 perm/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Permutation Test (n=500)",
+      "operation": "permutation_test",
+      "data_size": "500 permutations",
+      "time_ms": 8.65,
+      "throughput": "57772 perm/s",
+      "memory_mb": null
+    },
+    {
+      "name": "Permutation Test (n=1000)",
+      "operation": "permutation_test",
+      "data_size": "1000 permutations",
+      "time_ms": 18.28,
+      "throughput": "54699 perm/s",
+      "memory_mb": null
+    }
+  ],
+  "scalability_tests": [
+    {
+      "operation": "Jaccard Distance",
+      "sizes": [
+        50,
+        100,
+        200,
+        500
+      ],
+      "times_ms": [
+        0.1,
+        0.17,
+        0.74,
+        3.79
+      ]
+    },
+    {
+      "operation": "Hamming Distance",
+      "sizes": [
+        50,
+        100,
+        200,
+        500
+      ],
+      "times_ms": [
+        0.05,
+        0.05,
+        0.34,
+        0.78
+      ]
+    },
+    {
+      "operation": "Hierarchical Clustering",
+      "sizes": [
+        50,
+        100,
+        200,
+        500
+      ],
+      "times_ms": [
+        0.23,
+        0.2,
+        0.33,
+        1.65
+      ]
+    },
+    {
+      "operation": "Correlation Matrix",
+      "sizes": [
+        20,
+        50,
+        100,
+        200
+      ],
+      "times_ms": [
+        0.13,
+        0.29,
+        1.2,
+        4.29
+      ]
+    },
+    {
+      "operation": "Richness Calculation",
+      "sizes": [
+        100,
+        500,
+        1000,
+        2000
+      ],
+      "times_ms": [
+        0.06,
+        0.04,
+        0.15,
+        0.05
+      ]
+    },
+    {
+      "operation": "Beta Diversity",
+      "sizes": [
+        50,
+        100,
+        200
+      ],
+      "times_ms": [
+        4.65,
+        18.21,
+        73.18
+      ]
+    },
+    {
+      "operation": "Permutation Test",
+      "sizes": [
+        100,
+        500,
+        1000
+      ],
+      "times_ms": [
+        2.06,
+        8.65,
+        18.28
+      ]
+    }
+  ]
+}
