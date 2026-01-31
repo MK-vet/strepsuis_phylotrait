@@ -40,6 +40,14 @@ from .data_backend import DataBackend, load_data_efficient, get_backend_status
 # Uncertainty quantification (Bootstrap CI + Permutation tests)
 from .uncertainty import UncertaintyQuantifier, apply_default_uncertainty
 
+# Parallel phylogenetic distance computation
+from .parallel_phylo import (
+    parallel_phylo_distance_matrix,
+    compute_faiths_pd_parallel,
+    pairwise_phylo_distances_efficient,
+    summarize_phylo_distances,
+)
+
 # Advanced statistical features from shared module
 try:
     from shared.advanced_statistics import (
@@ -61,6 +69,10 @@ __all__ = [
     "get_backend_status",
     "UncertaintyQuantifier",
     "apply_default_uncertainty",
+    "parallel_phylo_distance_matrix",
+    "compute_faiths_pd_parallel",
+    "pairwise_phylo_distances_efficient",
+    "summarize_phylo_distances",
     "__version__"
 ]
 
