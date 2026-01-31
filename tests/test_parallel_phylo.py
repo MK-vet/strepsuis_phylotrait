@@ -227,6 +227,8 @@ class TestPairwiseDistancesEfficient:
         with pytest.warns(UserWarning):
             pair_dist = pairwise_phylo_distances_efficient(dist_df, pairs)
 
+        # For a nonexistent taxon, we expect no valid pairwise distances to be returned
+        assert pair_dist.empty
 
 class TestSummarizePhyloDistances:
     """Test distance matrix summarization."""
