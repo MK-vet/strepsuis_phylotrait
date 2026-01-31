@@ -26,20 +26,16 @@ License: MIT
 
 import os
 import pandas as pd
-import numpy as np
 from pathlib import Path
 from typing import Optional, Union, Dict, List, Any
 import hashlib
 import json
+import importlib.util
 import warnings
 
 # Optional dependencies
-try:
-    import pyarrow as pa
-    import pyarrow.parquet as pq
-    PYARROW_AVAILABLE = True
-except ImportError:
-    PYARROW_AVAILABLE = False
+PYARROW_AVAILABLE = importlib.util.find_spec("pyarrow") is not None
+if not PYARROW_AVAILABLE:
     warnings.warn(
         "PyArrow not available. Install with: pip install pyarrow\n"
         "Parquet features will be disabled."
