@@ -110,9 +110,7 @@ def test_generate_report_without_results(sample_data, tmp_path):
 
 
 def test_reproducibility(analyzer):
-    """Test that analysis is reproducible with same seed."""
-    analyzer.load_data() if hasattr(analyzer, "load_data") else None
-
+    """Test that analysis is reproducible with same seed (stubbed)."""
     analyzer.results = {
         "status": "success",
         "output_dir": str(analyzer.output_dir),

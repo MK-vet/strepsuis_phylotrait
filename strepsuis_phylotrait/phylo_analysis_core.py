@@ -80,6 +80,10 @@ os.environ["MKL_NUM_THREADS"] = "1"
 warnings.filterwarnings("ignore", category=UserWarning)
 sns.set(style="whitegrid")
 
+LARGE_DATASET_THRESHOLD = 80
+LARGE_FEATURE_THRESHOLD = 50
+MAX_ITEMSETS_LIMIT = 2000
+
 
 ###############################################################################
 # LOGGING AND PROGRESS TRACKING UTILITIES
@@ -2038,13 +2042,16 @@ class TraitAnalyzer:
         X = df[binary_columns].values
         y = df["Cluster"].values
         importance_scores = []
-        if len(df) > 80:
+        if len(df) > LARGE_DATASET_THRESHOLD:
             n_bootstrap = min(n_bootstrap, 30)
+            n_estimators = max(30, 100 - (len(df) - LARGE_DATASET_THRESHOLD) // 10)
+        else:
+            n_estimators = 100
 
         for _ in tqdm(range(n_bootstrap), desc="Bootstrap Feature Importance"):
             indices = np.random.choice(len(X), len(X), replace=True)
             X_boot, y_boot = X[indices], y[indices]
-            rf = RandomForestClassifier(n_estimators=30, random_state=42)
+            rf = RandomForestClassifier(n_estimators=n_estimators, random_state=42)
             rf.fit(X_boot, y_boot)
             importance_scores.append(rf.feature_importances_)
 
@@ -2095,19 +2102,22 @@ class TraitAnalyzer:
             binary_cols = [col for col in df.columns if col not in ["Strain_ID", "Cluster"]]
             feature_counts = df[binary_cols].sum().sort_values(ascending=False)
             selected_features = feature_counts.index[:max_features].tolist()
-            if len(df) > 80 and len(selected_features) > 50:
-                selected_features = selected_features[:50]
+            if len(df) > LARGE_DATASET_THRESHOLD and len(selected_features) > LARGE_FEATURE_THRESHOLD:
+                selected_features = selected_features[:LARGE_FEATURE_THRESHOLD]
             print(f"Selected {len(selected_features)}/{len(binary_cols)} most frequent features")
             trait_df = df[selected_features].copy()
 
-            max_len = 3
-            if len(trait_df.columns) > 50:
+            max_len = 2 if len(trait_df.columns) > LARGE_FEATURE_THRESHOLD else 3
+            if len(trait_df.columns) > LARGE_FEATURE_THRESHOLD:
                 adaptive_min_support = max(min_support, 0.1)
-                max_len = 2
                 print(f"Adapting min_support to {adaptive_min_support} for large dataset")
             else:
                 adaptive_min_support = min_support
-            max_itemsets = 2000 if len(df) > 80 or len(trait_df.columns) > 50 else None
+            max_itemsets = (
+                MAX_ITEMSETS_LIMIT
+                if len(df) > LARGE_DATASET_THRESHOLD or len(trait_df.columns) > LARGE_FEATURE_THRESHOLD
+                else None
+            )
 
             while len(selected_features) > 10:
                 try:
@@ -2121,6 +2131,7 @@ class TraitAnalyzer:
                         max_len=max_len,
                     )
                     if max_itemsets and len(frequent_itemsets) > max_itemsets:
+                        # Bound itemset volume for large datasets to keep runtime predictable.
                         frequent_itemsets = frequent_itemsets.nlargest(max_itemsets, "support")
                     break
                 except MemoryError:
@@ -2291,8 +2302,8 @@ class TraitAnalyzer:
             all_pvals = []
             test_indices = []
             active_features = [feat for feat in binary_cols if df[feat].sum() > 0]
-            if len(df) > 80 and len(active_features) > 50:
-                active_features = active_features[:50]
+            if len(df) > LARGE_DATASET_THRESHOLD and len(active_features) > LARGE_FEATURE_THRESHOLD:
+                active_features = active_features[:LARGE_FEATURE_THRESHOLD]
             print(f"Found {len(active_features)} active features for analysis")
 
             for feature in active_features:
@@ -2372,9 +2383,9 @@ class TraitAnalyzer:
         try:
             binary_cols = [col for col in df.columns if col not in ["Strain_ID", "Cluster"]]
             active_traits = [col for col in binary_cols if df[col].sum() > 0]
-            if len(df) > 80 and len(active_traits) > 20:
+            if len(df) > LARGE_DATASET_THRESHOLD and len(active_traits) > 20:
                 active_traits = active_traits[:20]
-            if len(df) > 80:
+            if len(df) > LARGE_DATASET_THRESHOLD:
                 n_bootstrap = min(n_bootstrap, 10)
             print(f"Running bootstrap log-odds analysis on {len(active_traits)} active traits")
             results = []
