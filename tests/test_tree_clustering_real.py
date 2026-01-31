@@ -106,7 +106,8 @@ class TestTreeAwareClusteringReal:
         terminals = [str(t.name) for t in real_tree.get_terminals()]
         clustering = TreeAwareClusteringModule(real_tree, terminals)
         
-        threshold = clustering._auto_threshold_max()
+        dist_matrix, _ = PhylogeneticCore.tree_to_distance_matrix(real_tree)
+        threshold = clustering._auto_threshold_max(distance_matrix=dist_matrix)
         
         assert isinstance(threshold, float)
         assert threshold > 0
@@ -116,7 +117,8 @@ class TestTreeAwareClusteringReal:
         terminals = [str(t.name) for t in real_tree.get_terminals()]
         clustering = TreeAwareClusteringModule(real_tree, terminals)
         
-        threshold = clustering._auto_threshold_sum()
+        dist_matrix, _ = PhylogeneticCore.tree_to_distance_matrix(real_tree)
+        threshold = clustering._auto_threshold_sum(distance_matrix=dist_matrix)
         
         assert isinstance(threshold, float)
         assert threshold > 0
@@ -126,7 +128,8 @@ class TestTreeAwareClusteringReal:
         terminals = [str(t.name) for t in real_tree.get_terminals()]
         clustering = TreeAwareClusteringModule(real_tree, terminals)
         
-        threshold = clustering._auto_threshold_avg()
+        dist_matrix, _ = PhylogeneticCore.tree_to_distance_matrix(real_tree)
+        threshold = clustering._auto_threshold_avg(distance_matrix=dist_matrix)
         
         assert isinstance(threshold, float)
         assert threshold > 0

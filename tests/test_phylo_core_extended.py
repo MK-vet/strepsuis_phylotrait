@@ -180,26 +180,28 @@ class TestTreeAwareClusteringExtended:
             seed=42
         )
         
+        distance_matrix, _ = PhylogeneticCore.tree_to_distance_matrix(tree)
+
         # Test _auto_threshold_max
-        if hasattr(module, '_auto_threshold_max'):
+        if hasattr(module, "_auto_threshold_max"):
             try:
-                threshold = module._auto_threshold_max()
+                threshold = module._auto_threshold_max(distance_matrix=distance_matrix)
                 assert threshold is not None
             except Exception as e:
                 print(f"Auto threshold max error: {e}")
-        
+
         # Test _auto_threshold_sum
-        if hasattr(module, '_auto_threshold_sum'):
+        if hasattr(module, "_auto_threshold_sum"):
             try:
-                threshold = module._auto_threshold_sum()
+                threshold = module._auto_threshold_sum(distance_matrix=distance_matrix)
                 assert threshold is not None
             except Exception as e:
                 print(f"Auto threshold sum error: {e}")
-        
+
         # Test _auto_threshold_avg
-        if hasattr(module, '_auto_threshold_avg'):
+        if hasattr(module, "_auto_threshold_avg"):
             try:
-                threshold = module._auto_threshold_avg()
+                threshold = module._auto_threshold_avg(distance_matrix=distance_matrix)
                 assert threshold is not None
             except Exception as e:
                 print(f"Auto threshold avg error: {e}")
