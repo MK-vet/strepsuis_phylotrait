@@ -83,6 +83,14 @@ sns.set(style="whitegrid")
 LARGE_DATASET_THRESHOLD = 80
 LARGE_FEATURE_THRESHOLD = 50
 MAX_ITEMSETS_LIMIT = 2000
+MAX_BOOTSTRAP_LARGE_DATASET = 30
+MIN_ESTIMATORS = 30
+BASE_ESTIMATORS = 100
+ESTIMATOR_REDUCTION_FACTOR = 10
+MAX_LEN_LARGE_DATASET = 2
+MAX_LEN_NORMAL = 3
+MAX_ACTIVE_TRAITS_LARGE_DATASET = 20
+MAX_BOOTSTRAP_LOG_ODDS_LARGE_DATASET = 10
 
 
 ###############################################################################
@@ -2043,10 +2051,13 @@ class TraitAnalyzer:
         y = df["Cluster"].values
         importance_scores = []
         if len(df) > LARGE_DATASET_THRESHOLD:
-            n_bootstrap = min(n_bootstrap, 30)
-            n_estimators = max(30, 100 - (len(df) - LARGE_DATASET_THRESHOLD) // 10)
+            n_bootstrap = min(n_bootstrap, MAX_BOOTSTRAP_LARGE_DATASET)
+            n_estimators = max(
+                MIN_ESTIMATORS,
+                BASE_ESTIMATORS - (len(df) - LARGE_DATASET_THRESHOLD) // ESTIMATOR_REDUCTION_FACTOR,
+            )
         else:
-            n_estimators = 100
+            n_estimators = BASE_ESTIMATORS
 
         for _ in tqdm(range(n_bootstrap), desc="Bootstrap Feature Importance"):
             indices = np.random.choice(len(X), len(X), replace=True)
@@ -2107,7 +2118,11 @@ class TraitAnalyzer:
             print(f"Selected {len(selected_features)}/{len(binary_cols)} most frequent features")
             trait_df = df[selected_features].copy()
 
-            max_len = 2 if len(trait_df.columns) > LARGE_FEATURE_THRESHOLD else 3
+            max_len = (
+                MAX_LEN_LARGE_DATASET
+                if len(trait_df.columns) > LARGE_FEATURE_THRESHOLD
+                else MAX_LEN_NORMAL
+            )
             if len(trait_df.columns) > LARGE_FEATURE_THRESHOLD:
                 adaptive_min_support = max(min_support, 0.1)
                 print(f"Adapting min_support to {adaptive_min_support} for large dataset")
@@ -2383,10 +2398,10 @@ class TraitAnalyzer:
         try:
             binary_cols = [col for col in df.columns if col not in ["Strain_ID", "Cluster"]]
             active_traits = [col for col in binary_cols if df[col].sum() > 0]
-            if len(df) > LARGE_DATASET_THRESHOLD and len(active_traits) > 20:
-                active_traits = active_traits[:20]
+            if len(df) > LARGE_DATASET_THRESHOLD and len(active_traits) > MAX_ACTIVE_TRAITS_LARGE_DATASET:
+                active_traits = active_traits[:MAX_ACTIVE_TRAITS_LARGE_DATASET]
             if len(df) > LARGE_DATASET_THRESHOLD:
-                n_bootstrap = min(n_bootstrap, 10)
+                n_bootstrap = min(n_bootstrap, MAX_BOOTSTRAP_LOG_ODDS_LARGE_DATASET)
             print(f"Running bootstrap log-odds analysis on {len(active_traits)} active traits")
             results = []
             for trait in active_traits:
