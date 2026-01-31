@@ -188,10 +188,16 @@ def print_step(step_num, total_steps, description):
 ###############################################################################
 # 1. CREATE TEMPLATE DIRECTORY & HTML TEMPLATE
 ###############################################################################
-def create_template_directory():
+def create_template_directory(base_dir="."):
     """Creates a 'templates' folder if needed and writes a comprehensive HTML template."""
-    if not os.path.exists("templates"):
-        os.makedirs("templates")
+    try:
+        resolved_base = os.path.abspath(base_dir)
+    except FileNotFoundError:
+        resolved_base = None
+    if not resolved_base or not os.path.isdir(resolved_base):
+        resolved_base = os.path.dirname(os.path.abspath(__file__))
+    templates_dir = os.path.join(resolved_base, "templates")
+    os.makedirs(templates_dir, exist_ok=True)
     template_content = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -477,7 +483,7 @@ def create_template_directory():
 </body>
 </html>
 """
-    with open("templates/report_template.html", "w") as f:
+    with open(os.path.join(templates_dir, "report_template.html"), "w") as f:
         f.write(template_content)
     print("Template directory and 'report_template.html' created successfully.")
 
@@ -900,11 +906,11 @@ class TreeAwareClusteringModule:
         print(f"Performing TreeCluster with method: {method}")
         if threshold is None:
             if method == "max":
-                threshold = self._auto_threshold_max()
+                threshold = self._auto_threshold_max(distance_matrix=distance_matrix)
             elif method == "sum":
-                threshold = self._auto_threshold_sum()
+                threshold = self._auto_threshold_sum(distance_matrix=distance_matrix)
             else:
-                threshold = self._auto_threshold_avg()
+                threshold = self._auto_threshold_avg(distance_matrix=distance_matrix)
 
         n_terminals = len(self.terminals)
         clusters = [[i] for i in range(n_terminals)]
@@ -944,20 +950,47 @@ class TreeAwareClusteringModule:
         labels = np.array([relabel_map[label] for label in labels])
         return labels
 
-    def _auto_threshold_max(self, conservative_factor=7.0):
+    def _auto_threshold_max(self, conservative_factor=7.0, distance_matrix=None):
         dists = []
-        for clade in self.tree.get_nonterminals():
-            leaves = clade.get_terminals()
-            if len(leaves) >= 2:
-                max_dist = 0
-                for i, leaf1 in enumerate(leaves):
-                    for leaf2 in leaves[i + 1 :]:
-                        try:
-                            dist = self.tree.distance(leaf1, leaf2)
-                            max_dist = max(max_dist, dist)
-                        except Exception:
-                            pass
-                dists.append(max_dist)
+        if distance_matrix is None:
+            for clade in self.tree.get_nonterminals():
+                leaves = clade.get_terminals()
+                if len(leaves) >= 2:
+                    max_dist = 0
+                    for i, leaf1 in enumerate(leaves):
+                        for leaf2 in leaves[i + 1 :]:
+                            try:
+                                dist = self.tree.distance(leaf1, leaf2)
+                                max_dist = max(max_dist, dist)
+                            except Exception:
+                                pass
+                    dists.append(max_dist)
+        else:
+            terminal_index = {str(term): idx for idx, term in enumerate(self.terminals)}
+            clade_indices = {}
+            for clade in self.tree.get_nonterminals():
+                leaves = clade.get_terminals()
+                if len(leaves) >= 2:
+                    indices = clade_indices.get(id(clade))
+                    if indices is None:
+                        indices = [
+                            terminal_index[str(leaf)]
+                            for leaf in leaves
+                            if str(leaf) in terminal_index
+                        ]
+                        clade_indices[id(clade)] = indices
+                    if len(indices) >= 2:
+                        max_dist = 0
+                        has_dist = False
+                        for i, t1 in enumerate(indices):
+                            for t2 in indices[i + 1 :]:
+                                dist = distance_matrix[t1, t2]
+                                if np.isnan(dist):
+                                    continue
+                                has_dist = True
+                                max_dist = max(max_dist, dist)
+                        if has_dist:
+                            dists.append(max_dist)
         if dists:
             q75, q25 = np.percentile(dists, [75, 25])
             iqr = q75 - q25
@@ -965,20 +998,47 @@ class TreeAwareClusteringModule:
             return threshold
         return 0.1
 
-    def _auto_threshold_sum(self, conservative_factor=7.0):
+    def _auto_threshold_sum(self, conservative_factor=7.0, distance_matrix=None):
         dists = []
-        for clade in self.tree.get_nonterminals():
-            leaves = clade.get_terminals()
-            if len(leaves) >= 2:
-                sum_dist = 0
-                for i, leaf1 in enumerate(leaves):
-                    for leaf2 in leaves[i + 1 :]:
-                        try:
-                            dist = self.tree.distance(leaf1, leaf2)
-                            sum_dist += dist
-                        except Exception:
-                            pass
-                dists.append(sum_dist)
+        if distance_matrix is None:
+            for clade in self.tree.get_nonterminals():
+                leaves = clade.get_terminals()
+                if len(leaves) >= 2:
+                    sum_dist = 0
+                    for i, leaf1 in enumerate(leaves):
+                        for leaf2 in leaves[i + 1 :]:
+                            try:
+                                dist = self.tree.distance(leaf1, leaf2)
+                                sum_dist += dist
+                            except Exception:
+                                pass
+                    dists.append(sum_dist)
+        else:
+            terminal_index = {str(term): idx for idx, term in enumerate(self.terminals)}
+            clade_indices = {}
+            for clade in self.tree.get_nonterminals():
+                leaves = clade.get_terminals()
+                if len(leaves) >= 2:
+                    indices = clade_indices.get(id(clade))
+                    if indices is None:
+                        indices = [
+                            terminal_index[str(leaf)]
+                            for leaf in leaves
+                            if str(leaf) in terminal_index
+                        ]
+                        clade_indices[id(clade)] = indices
+                    if len(indices) >= 2:
+                        sum_dist = 0
+                        has_dist = False
+                        for i, t1 in enumerate(indices):
+                            for t2 in indices[i + 1 :]:
+                                dist = distance_matrix[t1, t2]
+                                if np.isnan(dist):
+                                    continue
+                                has_dist = True
+                                sum_dist += dist
+                        if has_dist:
+                            dists.append(sum_dist)
         if dists:
             q75, q25 = np.percentile(dists, [75, 25])
             iqr = q75 - q25
@@ -986,23 +1046,50 @@ class TreeAwareClusteringModule:
             return threshold
         return 1.0
 
-    def _auto_threshold_avg(self, conservative_factor=7.0):
+    def _auto_threshold_avg(self, conservative_factor=7.0, distance_matrix=None):
         dists = []
-        for clade in self.tree.get_nonterminals():
-            leaves = clade.get_terminals()
-            if len(leaves) >= 2:
-                sum_dist = 0
-                count = 0
-                for i, leaf1 in enumerate(leaves):
-                    for leaf2 in leaves[i + 1 :]:
-                        try:
-                            dist = self.tree.distance(leaf1, leaf2)
-                            sum_dist += dist
-                            count += 1
-                        except Exception:
-                            pass
-                if count > 0:
-                    dists.append(sum_dist / count)
+        if distance_matrix is None:
+            for clade in self.tree.get_nonterminals():
+                leaves = clade.get_terminals()
+                if len(leaves) >= 2:
+                    sum_dist = 0
+                    count = 0
+                    for i, leaf1 in enumerate(leaves):
+                        for leaf2 in leaves[i + 1 :]:
+                            try:
+                                dist = self.tree.distance(leaf1, leaf2)
+                                sum_dist += dist
+                                count += 1
+                            except Exception:
+                                pass
+                    if count > 0:
+                        dists.append(sum_dist / count)
+        else:
+            terminal_index = {str(term): idx for idx, term in enumerate(self.terminals)}
+            clade_indices = {}
+            for clade in self.tree.get_nonterminals():
+                leaves = clade.get_terminals()
+                if len(leaves) >= 2:
+                    indices = clade_indices.get(id(clade))
+                    if indices is None:
+                        indices = [
+                            terminal_index[str(leaf)]
+                            for leaf in leaves
+                            if str(leaf) in terminal_index
+                        ]
+                        clade_indices[id(clade)] = indices
+                    if len(indices) >= 2:
+                        sum_dist = 0
+                        count = 0
+                        for i, t1 in enumerate(indices):
+                            for t2 in indices[i + 1 :]:
+                                dist = distance_matrix[t1, t2]
+                                if np.isnan(dist):
+                                    continue
+                                sum_dist += dist
+                                count += 1
+                        if count > 0:
+                            dists.append(sum_dist / count)
         if dists:
             q75, q25 = np.percentile(dists, [75, 25])
             iqr = q75 - q25
@@ -1951,11 +2038,13 @@ class TraitAnalyzer:
         X = df[binary_columns].values
         y = df["Cluster"].values
         importance_scores = []
+        if len(df) > 80:
+            n_bootstrap = min(n_bootstrap, 30)
 
         for _ in tqdm(range(n_bootstrap), desc="Bootstrap Feature Importance"):
             indices = np.random.choice(len(X), len(X), replace=True)
             X_boot, y_boot = X[indices], y[indices]
-            rf = RandomForestClassifier(n_estimators=100, random_state=42)
+            rf = RandomForestClassifier(n_estimators=30, random_state=42)
             rf.fit(X_boot, y_boot)
             importance_scores.append(rf.feature_importances_)
 
@@ -2006,14 +2095,19 @@ class TraitAnalyzer:
             binary_cols = [col for col in df.columns if col not in ["Strain_ID", "Cluster"]]
             feature_counts = df[binary_cols].sum().sort_values(ascending=False)
             selected_features = feature_counts.index[:max_features].tolist()
+            if len(df) > 80 and len(selected_features) > 50:
+                selected_features = selected_features[:50]
             print(f"Selected {len(selected_features)}/{len(binary_cols)} most frequent features")
             trait_df = df[selected_features].copy()
 
+            max_len = 3
             if len(trait_df.columns) > 50:
                 adaptive_min_support = max(min_support, 0.1)
+                max_len = 2
                 print(f"Adapting min_support to {adaptive_min_support} for large dataset")
             else:
                 adaptive_min_support = min_support
+            max_itemsets = 2000 if len(df) > 80 or len(trait_df.columns) > 50 else None
 
             while len(selected_features) > 10:
                 try:
@@ -2021,8 +2115,13 @@ class TraitAnalyzer:
                         f"Attempting apriori with {len(selected_features)} features, min_support={adaptive_min_support}"
                     )
                     frequent_itemsets = apriori(
-                        trait_df, min_support=adaptive_min_support, use_colnames=True, max_len=3
+                        trait_df,
+                        min_support=adaptive_min_support,
+                        use_colnames=True,
+                        max_len=max_len,
                     )
+                    if max_itemsets and len(frequent_itemsets) > max_itemsets:
+                        frequent_itemsets = frequent_itemsets.nlargest(max_itemsets, "support")
                     break
                 except MemoryError:
                     selected_features = selected_features[: len(selected_features) // 2]
@@ -2192,6 +2291,8 @@ class TraitAnalyzer:
             all_pvals = []
             test_indices = []
             active_features = [feat for feat in binary_cols if df[feat].sum() > 0]
+            if len(df) > 80 and len(active_features) > 50:
+                active_features = active_features[:50]
             print(f"Found {len(active_features)} active features for analysis")
 
             for feature in active_features:
@@ -2271,6 +2372,10 @@ class TraitAnalyzer:
         try:
             binary_cols = [col for col in df.columns if col not in ["Strain_ID", "Cluster"]]
             active_traits = [col for col in binary_cols if df[col].sum() > 0]
+            if len(df) > 80 and len(active_traits) > 20:
+                active_traits = active_traits[:20]
+            if len(df) > 80:
+                n_bootstrap = min(n_bootstrap, 10)
             print(f"Running bootstrap log-odds analysis on {len(active_traits)} active traits")
             results = []
             for trait in active_traits:
@@ -2461,9 +2566,9 @@ class HTMLReportGenerator:
     def __init__(self, output_folder, base_dir="."):
         self.output_folder = output_folder
         self.base_dir = base_dir
-        create_template_directory()
+        create_template_directory(base_dir=self.base_dir)
         self.template_env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(searchpath="./templates"),
+            loader=jinja2.FileSystemLoader(searchpath=os.path.join(self.base_dir, "templates")),
             autoescape=jinja2.select_autoescape(["html", "xml"]),
         )
 
@@ -3382,17 +3487,23 @@ class PhylogeneticAnalysis:
             for threshold_factor in [0.8, 1.0, 1.2, 1.5]:
                 if method == "max":
                     threshold = (
-                        tree_clustering._auto_threshold_max(conservative_factor=5.0)
+                        tree_clustering._auto_threshold_max(
+                            conservative_factor=5.0, distance_matrix=distance_matrix
+                        )
                         * threshold_factor
                     )
                 elif method == "sum":
                     threshold = (
-                        tree_clustering._auto_threshold_sum(conservative_factor=5.0)
+                        tree_clustering._auto_threshold_sum(
+                            conservative_factor=5.0, distance_matrix=distance_matrix
+                        )
                         * threshold_factor
                     )
                 else:
                     threshold = (
-                        tree_clustering._auto_threshold_avg(conservative_factor=5.0)
+                        tree_clustering._auto_threshold_avg(
+                            conservative_factor=5.0, distance_matrix=distance_matrix
+                        )
                         * threshold_factor
                     )
 

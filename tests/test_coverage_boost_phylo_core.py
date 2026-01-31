@@ -372,8 +372,13 @@ def test_tree_cluster_auto_threshold_max(sample_tree):
     terminals = tree.get_terminals()
     module = TreeAwareClusteringModule(tree, terminals)
 
-    threshold = module._auto_threshold_max(conservative_factor=5.0)
+    distance_matrix, _ = core.tree_to_distance_matrix(tree)
+    threshold = module._auto_threshold_max(
+        conservative_factor=5.0, distance_matrix=distance_matrix
+    )
+    fallback_threshold = module._auto_threshold_max(conservative_factor=5.0)
     assert isinstance(threshold, float)
+    assert isinstance(fallback_threshold, float)
     assert threshold > 0
 
 
@@ -384,8 +389,13 @@ def test_tree_cluster_auto_threshold_sum(sample_tree):
     terminals = tree.get_terminals()
     module = TreeAwareClusteringModule(tree, terminals)
 
-    threshold = module._auto_threshold_sum(conservative_factor=5.0)
+    distance_matrix, _ = core.tree_to_distance_matrix(tree)
+    threshold = module._auto_threshold_sum(
+        conservative_factor=5.0, distance_matrix=distance_matrix
+    )
+    fallback_threshold = module._auto_threshold_sum(conservative_factor=5.0)
     assert isinstance(threshold, float)
+    assert isinstance(fallback_threshold, float)
     assert threshold > 0
 
 
@@ -396,8 +406,13 @@ def test_tree_cluster_auto_threshold_avg(sample_tree):
     terminals = tree.get_terminals()
     module = TreeAwareClusteringModule(tree, terminals)
 
-    threshold = module._auto_threshold_avg(conservative_factor=5.0)
+    distance_matrix, _ = core.tree_to_distance_matrix(tree)
+    threshold = module._auto_threshold_avg(
+        conservative_factor=5.0, distance_matrix=distance_matrix
+    )
+    fallback_threshold = module._auto_threshold_avg(conservative_factor=5.0)
     assert isinstance(threshold, float)
+    assert isinstance(fallback_threshold, float)
     assert threshold > 0
 
 
