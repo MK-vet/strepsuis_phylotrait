@@ -124,7 +124,7 @@ class DataBackend:
     def _save_cache_metadata(self):
         """Save cache metadata to disk."""
         metadata_file = self.cache_dir / "cache_metadata.json"
-        with open(metadata_file, 'w') as f:
+        with open(metadata_file, 'w', encoding='utf-8') as f:
             json.dump(self._cache_metadata, f, indent=2)
 
     def _get_file_hash(self, file_path: Path) -> str:
