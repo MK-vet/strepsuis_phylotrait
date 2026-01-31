@@ -109,7 +109,7 @@ class DataBackend:
         if self.use_duckdb:
             self.conn = duckdb.connect(":memory:")
             self.conn.execute(f"PRAGMA memory_limit='{memory_limit}'")
-            self.conn.execute("PRAGMA threads=4")  # Use 4 threads max
+            self.conn.execute(f"PRAGMA threads={os.cpu_count()}")  # Use all available threads
 
         self._cache_metadata = self._load_cache_metadata()
 
