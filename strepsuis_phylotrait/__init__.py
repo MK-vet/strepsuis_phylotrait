@@ -34,6 +34,12 @@ __license__ = "MIT"
 from .analyzer import PhyloTraitAnalyzer
 from .config import Config
 
+# High-performance data backend (Parquet + DuckDB)
+from .data_backend import DataBackend, load_data_efficient, get_backend_status
+
+# Uncertainty quantification (Bootstrap CI + Permutation tests)
+from .uncertainty import UncertaintyQuantifier, apply_default_uncertainty
+
 # Advanced statistical features from shared module
 try:
     from shared.advanced_statistics import (
@@ -47,7 +53,16 @@ try:
 except ImportError:
     _HAS_ADVANCED_STATS = False
 
-__all__ = ["PhyloTraitAnalyzer", "Config", "__version__"]
+__all__ = [
+    "PhyloTraitAnalyzer",
+    "Config",
+    "DataBackend",
+    "load_data_efficient",
+    "get_backend_status",
+    "UncertaintyQuantifier",
+    "apply_default_uncertainty",
+    "__version__"
+]
 
 # Add advanced statistics if available
 if _HAS_ADVANCED_STATS:
