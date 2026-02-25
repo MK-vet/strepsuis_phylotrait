@@ -82,14 +82,14 @@ sns.set(style="whitegrid")
 
 LARGE_DATASET_THRESHOLD = 80
 LARGE_FEATURE_THRESHOLD = 50
-MAX_ITEMSETS_LIMIT = 2000
+MAX_ITEMSETS_LIMIT = 2000  # Bound itemset volume for large datasets.
 MAX_BOOTSTRAP_LARGE_DATASET = 30
 MIN_ESTIMATORS = 30
 BASE_ESTIMATORS = 100
 ESTIMATOR_REDUCTION_FACTOR = 10
 MAX_LEN_LARGE_DATASET = 2
 MAX_LEN_NORMAL = 3
-MAX_ACTIVE_TRAITS_LARGE_DATASET = 20
+MAX_ACTIVE_TRAITS_LARGE_DATASET = 50
 MAX_BOOTSTRAP_LOG_ODDS_LARGE_DATASET = 10
 
 
@@ -495,9 +495,11 @@ def create_template_directory(base_dir="."):
 </body>
 </html>
 """
-    with open(os.path.join(templates_dir, "report_template.html"), "w") as f:
+    template_path = os.path.join(templates_dir, "report_template.html")
+    with open(template_path, "w") as f:
         f.write(template_content)
     print("Template directory and 'report_template.html' created successfully.")
+    return templates_dir
 
 
 ###############################################################################
@@ -974,8 +976,13 @@ class TreeAwareClusteringModule:
                             try:
                                 dist = self.tree.distance(leaf1, leaf2)
                                 max_dist = max(max_dist, dist)
-                            except Exception:
-                                pass
+                            except Exception as exc:
+                                logging.debug(
+                                    "Skipping distance calculation for leaves %s and %s: %s",
+                                    leaf1,
+                                    leaf2,
+                                    exc,
+                                )
                     dists.append(max_dist)
         else:
             terminal_index = {str(term): idx for idx, term in enumerate(self.terminals)}
@@ -1022,8 +1029,13 @@ class TreeAwareClusteringModule:
                             try:
                                 dist = self.tree.distance(leaf1, leaf2)
                                 sum_dist += dist
-                            except Exception:
-                                pass
+                            except Exception as exc:
+                                logging.debug(
+                                    "Skipping distance calculation for leaves %s and %s: %s",
+                                    leaf1,
+                                    leaf2,
+                                    exc,
+                                )
                     dists.append(sum_dist)
         else:
             terminal_index = {str(term): idx for idx, term in enumerate(self.terminals)}
@@ -1072,8 +1084,13 @@ class TreeAwareClusteringModule:
                                 dist = self.tree.distance(leaf1, leaf2)
                                 sum_dist += dist
                                 count += 1
-                            except Exception:
-                                pass
+                            except Exception as exc:
+                                logging.debug(
+                                    "Skipping distance calculation for leaves %s and %s: %s",
+                                    leaf1,
+                                    leaf2,
+                                    exc,
+                                )
                     if count > 0:
                         dists.append(sum_dist / count)
         else:
@@ -2393,6 +2410,11 @@ class TraitAnalyzer:
             return df_posthoc
 
     def bootstrap_log_odds(self, df, n_bootstrap=100):
+        """Bootstrap log-odds confidence intervals.
+
+        For large datasets, the analysis limits the number of active traits
+        to keep runtime manageable.
+        """
         import traceback
 
         try:
@@ -2592,9 +2614,9 @@ class HTMLReportGenerator:
     def __init__(self, output_folder, base_dir="."):
         self.output_folder = output_folder
         self.base_dir = base_dir
-        create_template_directory(base_dir=self.base_dir)
+        templates_dir = create_template_directory(base_dir=self.base_dir)
         self.template_env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(searchpath=os.path.join(self.base_dir, "templates")),
+            loader=jinja2.FileSystemLoader(searchpath=templates_dir),
             autoescape=jinja2.select_autoescape(["html", "xml"]),
         )
 
